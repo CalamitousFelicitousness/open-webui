@@ -17,6 +17,14 @@
 
 	const i18n = getContext('i18n');
 
+	const getTimestampedFileName = (mimeType: string) => {
+		const now = new Date();
+		const pad = (n: number) => String(n).padStart(2, '0');
+		const ts = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+		const ext = mimeType.split('/')[1] || 'png';
+		return `image_${ts}.${ext}`;
+	};
+
 	let previewElement = null;
 
 	const handleKeyDown = (event: KeyboardEvent) => {
@@ -88,11 +96,7 @@
 							});
 
 							const mimeType = blob.type || 'image/png';
-							// create file name based on the MIME type, alt should be a valid file name with extension
-							const fileName = `${$i18n
-								.t('Generated Image')
-								.toLowerCase()
-								.replace(/ /g, '_')}.${mimeType.split('/')[1]}`;
+							const fileName = getTimestampedFileName(mimeType);
 
 							// Use FileSaver to save the blob
 							saveAs(blob, fileName);
@@ -108,11 +112,7 @@
 									// Create a new Blob with the correct MIME type
 									const blobWithType = new Blob([blob], { type: mimeType });
 
-									// create file name based on the MIME type, alt should be a valid file name with extension
-									const fileName = `${$i18n
-										.t('Generated Image')
-										.toLowerCase()
-										.replace(/ /g, '_')}.${mimeType.split('/')[1]}`;
+									const fileName = getTimestampedFileName(mimeType);
 
 									// Use FileSaver to save the blob
 									saveAs(blobWithType, fileName);
@@ -149,11 +149,7 @@
 									// Create a new Blob with the correct MIME type
 									const blobWithType = new Blob([blob], { type: mimeType });
 
-									// create file name based on the MIME type, alt should be a valid file name with extension
-									const fileName = `${$i18n
-										.t('Generated Image')
-										.toLowerCase()
-										.replace(/ /g, '_')}.${mimeType.split('/')[1]}`;
+									const fileName = getTimestampedFileName(mimeType);
 
 									// Use FileSaver to save the blob
 									saveAs(blobWithType, fileName);
