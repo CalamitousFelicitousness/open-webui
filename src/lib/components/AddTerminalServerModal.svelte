@@ -162,13 +162,20 @@
 				if (error?.status !== 404) throw error;
 			}
 
-			const lifecycle = await getOrchestratorLifecycle(
-				localStorage.token,
-				url,
-				key,
-				policyId,
-				auth_type
-			);
+			// A policy that exists may still have no lifecycle configured.
+			let lifecycle: any = null;
+			try {
+				lifecycle = await getOrchestratorLifecycle(
+					localStorage.token,
+					url,
+					key,
+					policyId,
+					auth_type
+				);
+			} catch (error: any) {
+				if (error?.status !== 404) throw error;
+			}
+
 			const data = policy?.data ?? {};
 			policyImage = data.image ?? '';
 			policyIdleTimeout = data.idle_timeout_minutes ?? 30;
